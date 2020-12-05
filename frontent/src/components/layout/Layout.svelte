@@ -2,6 +2,17 @@
   import Header from "./Header.svelte";
 </script>
 
-<Header />
+<style>
+  .layout-container {
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+</style>
 
-<slot />
+<div class="layout-container grid h-screen">
+  <Header />
+
+  <div>
+    <slot />
+  </div>
+</div>
