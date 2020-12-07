@@ -18,7 +18,7 @@
 </style>
 
 <Layout>
-  <div class="flex flex-col items-center justify-center h-full gap-8">
+  <div class="flex flex-col items-center h-full gap-8 pt-40">
     <div class="welcome-container text-center">
       <h1 class="font-semibold">Welcome to GameRec</h1>
       <p class="text-body-1">

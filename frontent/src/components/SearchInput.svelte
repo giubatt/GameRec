@@ -1,32 +1,153 @@
 <script>
+  import SearchIcon from "../icons/search.svg";
+  import CloseIcon from "../icons/close.svg";
+
+  let timer;
+  let value = "gerge";
+  let debouncedValue;
+  let items = Array(0);
+
+  $: debounce(value);
+  $: console.log({ debouncedValue });
+
+  function clearInput() {
+    clearTimeout(timer);
+    value = "";
+  }
+
+  const debounce = (value) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      debouncedValue = value;
+    }, 500);
+  };
 </script>
 
 <style lang="scss">
-  .search-container {
+  .search-input {
     display: flex;
     align-items: center;
     width: 700px;
     height: 50px;
-    padding: 8px 24px;
+    padding: 8px 12px 8px 24px;
 
     background: #dfdfe0;
     border: 1px solid #a5abb1;
-    border-radius: 35px;
+    border-radius: 25px;
+
+    &.active {
+      background: transparent;
+      border-radius: 25px 25px 0 0;
+
+      input {
+        background: transparent;
+      }
+    }
+
+    .divider-vertical {
+      height: auto;
+      width: 1px;
+      background-color: #a5abb1;
+      align-self: stretch;
+    }
 
     input {
+      height: 100%;
+      font-size: 18px;
       color: #656565;
       flex-grow: 1;
       background: #dfdfe0;
       outline: none;
     }
 
-    span {
+    button {
       color: #a5abb1;
+    }
+  }
+
+  .search-results {
+    width: 700px;
+    border: 1px solid #a5abb1;
+    border-top: none;
+    border-radius: 0 0 25px 25px;
+
+    .empty {
+      padding: 20px 75px;
+      color: #f23030;
+    }
+
+    .list {
+      .list-item {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 12px;
+        height: 70px;
+        padding: 10px 25px;
+        align-items: center;
+
+        &:hover {
+          background-color: #dfdfe0;
+        }
+
+        .item-image {
+        }
+
+        .item-name {
+          font-size: 16px;
+          color: #656565;
+        }
+      }
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+
+      border-top: 1px solid #a5abb1;
+      padding: 10px 25px;
+      color: #f28b30;
     }
   }
 </style>
 
-<div class="search-container">
-  <input type="text" placeholder="Search..." />
-  <span>O</span>
+<div>
+  <div class="search-input" class:active={!!value}>
+    <input type="text" placeholder="Search..." bind:value />
+    <span class="flex items-center gap-2">
+      {#if !!value}
+        <button on:click={clearInput}><CloseIcon class="icon" /></button>
+      {/if}
+      <hr class="divider-vertical" />
+      <button><SearchIcon class="icon" /></button>
+    </span>
+  </div>
+
+  {#if !!value}
+    <div class="search-results">
+      {#if items.length}
+        <div class="list">
+          {#each items as item}
+            <div class="list-item" on:click={() => console.log('oi')}>
+              <span class="item-image">
+                <img
+                  src="https://images.igdb.com/igdb/image/upload/t_cover_big/ndfzbf3xvuuchijx7v1c.jpg"
+                  alt="cover art" />
+              </span>
+              <span class="item-name">TerraNova (1900)</span>
+            </div>
+          {/each}
+        </div>
+      {:else}
+        <div class="empty">Sorry, there are no results!</div>
+      {/if}
+      <div class="footer">
+        <span>
+          {#if items.length}
+            <a href="#results">See all results for <i>{value}</i></a>
+          {/if}
+        </span>
+        <button>Advanced Search</button>
+      </div>
+    </div>
+  {/if}
 </div>
