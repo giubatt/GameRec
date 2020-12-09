@@ -43,7 +43,11 @@
       <div class="flex flex-col items-center gap-4 pt-10 pb-10">
         <h1 class="font-semibold">Success!</h1>
         {#each selectedGames as gameId}
-          <SelectedGame id={gameId} />
+          <SelectedGame
+            id={gameId}
+            on:remove={() => {
+              selectedGames = selectedGames.filter((id) => id !== gameId);
+            }} />
         {/each}
       </div>
       <button>Get Recomendations</button>

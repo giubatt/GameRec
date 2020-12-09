@@ -6,7 +6,7 @@
   const dispatch = createEventDispatcher();
 
   let timer;
-  let value = "gerge";
+  let value = "";
   let debouncedValue;
   let items = Array(1);
 
