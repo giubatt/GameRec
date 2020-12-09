@@ -1,11 +1,14 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import SearchIcon from "../icons/search.svg";
   import CloseIcon from "../icons/close.svg";
+
+  const dispatch = createEventDispatcher();
 
   let timer;
   let value = "gerge";
   let debouncedValue;
-  let items = Array(0);
+  let items = Array(1);
 
   $: debounce(value);
   $: console.log({ debouncedValue });
@@ -20,6 +23,11 @@
     timer = setTimeout(() => {
       debouncedValue = value;
     }, 500);
+  };
+
+  const selectGame = (id) => {
+    dispatch("selected", { id: Math.round(Math.random() * 100) });
+    value = "";
   };
 </script>
 
@@ -127,7 +135,7 @@
       {#if items.length}
         <div class="list">
           {#each items as item}
-            <div class="list-item" on:click={() => console.log('oi')}>
+            <div class="list-item" on:click={() => selectGame(item?.id)}>
               <span class="item-image">
                 <img
                   src="https://images.igdb.com/igdb/image/upload/t_cover_big/ndfzbf3xvuuchijx7v1c.jpg"
