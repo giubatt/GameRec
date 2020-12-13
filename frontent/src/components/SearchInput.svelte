@@ -8,7 +8,7 @@
   let timer;
   let value = "";
   let debouncedValue;
-  let items = Array(1);
+  let items = Array(3);
 
   $: debounce(value);
   $: console.log({ debouncedValue });
@@ -59,13 +59,18 @@
       align-self: stretch;
     }
 
-    input {
-      height: 100%;
-      font-size: 18px;
-      color: #656565;
+    form {
+      display: flex;
       flex-grow: 1;
-      background: #dfdfe0;
-      outline: none;
+
+      input {
+        flex-grow: 1;
+        height: 100%;
+        font-size: 18px;
+        color: #656565;
+        background: #dfdfe0;
+        outline: none;
+      }
     }
 
     button {
@@ -85,6 +90,15 @@
     }
 
     .list {
+      :nth-child(1) {
+        background-color: #dfdfe0;
+      }
+      &:hover {
+        :nth-child(1) {
+          background-color: unset;
+        }
+      }
+
       .list-item {
         display: grid;
         grid-template-columns: 38px 1fr;
@@ -110,17 +124,31 @@
     .footer {
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       border-top: 1px solid #a5abb1;
-      padding: 10px 25px;
+      padding: 6px 6px 6px 25px;
       color: #f28b30;
+
+      button {
+        height: 38px;
+        padding: 8px 16px;
+        background-color: #f28b30;
+        border-radius: 19px;
+        color: white;
+        font-size: 16px;
+        font-weight: 400;
+      }
     }
   }
 </style>
 
 <div>
   <div class="search-input" class:active={!!value}>
-    <input type="text" placeholder="Search..." bind:value />
+    <form on:submit|preventDefault={() => selectGame(items[0])}>
+      <input type="text" placeholder="Search..." bind:value />
+      <button type="submit" style={{ display: 'none' }} />
+    </form>
     <span class="flex items-center gap-2">
       {#if !!value}
         <button on:click={clearInput}><CloseIcon class="icon" /></button>

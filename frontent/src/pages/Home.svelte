@@ -2,8 +2,9 @@
   import Layout from "../components/layout/Layout.svelte";
   import SearchInput from "../components/SearchInput.svelte";
   import SelectedGame from "../components/SelectedGame.svelte";
+  import PlayIcon from "../icons/play.svg";
 
-  let selectedGames = [1, 6];
+  let selectedGames = [];
   $: console.log({ selectedGames });
 </script>
 
@@ -23,6 +24,24 @@
   .add-more-text {
     width: 400px;
     text-align: center;
+  }
+
+  .cta-button {
+    display: flex;
+    height: 40px;
+    width: 300px;
+    background-color: #8cc713;
+    border-radius: 20px;
+
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-weight: 800;
+    font-size: 13px;
+    gap: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
   }
 </style>
 
@@ -50,7 +69,7 @@
             }} />
         {/each}
       </div>
-      <button>Get Recomendations</button>
+      <button class="cta-button"><PlayIcon class="icon" />Get Recomendations</button>
       <p class="add-more-text text-body-1">
         You can add more titles to receive more accurate recommendations or
         continue to see a list of recommended games
