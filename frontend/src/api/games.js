@@ -1,5 +1,5 @@
 const API_URL = 'https://secret-stream-44245.herokuapp.com/api'
-const RECOMMENDATION_API_URL = 'http://shielded-temple-04000.herokuapp.com/api'
+const RECOMMENDATION_API_URL = 'https://shielded-temple-04000.herokuapp.com/api'
 
 export const getGames = async (query) => {
   const response = await fetch(`${API_URL}/searchGame/${query}`)
