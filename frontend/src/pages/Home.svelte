@@ -72,6 +72,7 @@
             id={gameId}
             on:remove={() => {
               selectedGames = selectedGames.filter((id) => id !== gameId);
+              $mutation.reset();
             }} />
         {/each}
       </div>
