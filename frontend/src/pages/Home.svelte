@@ -4,7 +4,7 @@
   import SelectedGame from "../components/SelectedGame.svelte";
   import PlayIcon from "../icons/play.svg";
 
-  let selectedGames = [3498];
+  let selectedGames = [];
 
   import { useMutation } from "@sveltestack/svelte-query";
   import { getRecommendation } from "../api/games";
@@ -72,7 +72,6 @@
             id={gameId}
             on:remove={() => {
               selectedGames = selectedGames.filter((id) => id !== gameId);
-              recGameId = '';
             }} />
         {/each}
       </div>
