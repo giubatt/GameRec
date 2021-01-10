@@ -2,16 +2,18 @@
   import { createEventDispatcher } from "svelte";
   import SearchIcon from "../icons/search.svg";
   import CloseIcon from "../icons/close.svg";
+  import { getGames } from "../api/games";
 
   const dispatch = createEventDispatcher();
 
   let timer;
   let value = "";
   let debouncedValue;
-  let items = Array(3);
+  let items = Array(0);
+  let loading = false;
 
   $: debounce(value);
-  $: console.log({ debouncedValue });
+  $: getAutocomplete(debouncedValue);
 
   function clearInput() {
     clearTimeout(timer);
@@ -19,6 +21,7 @@
   }
 
   const debounce = (value) => {
+    loading = true;
     clearTimeout(timer);
     timer = setTimeout(() => {
       debouncedValue = value;
@@ -26,9 +29,19 @@
   };
 
   const selectGame = (id) => {
-    dispatch("selected", { id: Math.round(Math.random() * 100) });
+    dispatch("selected", { id });
     value = "";
   };
+
+  async function getAutocomplete(query) {
+    if (query) {
+      items = [];
+      loading = true;
+      const games = await getGames(query);
+      items = games;
+      loading = false;
+    }
+  }
 </script>
 
 <style lang="scss">
@@ -145,7 +158,7 @@
 
 <div>
   <div class="search-input" class:active={!!value}>
-    <form on:submit|preventDefault={() => selectGame(items[0])}>
+    <form on:submit|preventDefault={() => selectGame(items[0]?.id)}>
       <input type="text" placeholder="Search..." bind:value />
       <button type="submit" style={{ display: 'none' }} />
     </form>
@@ -160,16 +173,16 @@
 
   {#if !!value}
     <div class="search-results">
-      {#if items.length}
+      {#if loading}
+        <div class="empty">Loading...</div>
+      {:else if items.length}
         <div class="list">
           {#each items as item}
             <div class="list-item" on:click={() => selectGame(item?.id)}>
               <span class="item-image">
-                <img
-                  src="https://images.igdb.com/igdb/image/upload/t_cover_big/ndfzbf3xvuuchijx7v1c.jpg"
-                  alt="cover art" />
+                <img src={item?.background_image} alt="cover art" />
               </span>
-              <span class="item-name">TerraNova (1900)</span>
+              <span class="item-name">{item?.name}</span>
             </div>
           {/each}
         </div>

@@ -1,14 +1,20 @@
 <script>
   import TrashIcon from "../icons/trash.svg";
   import { createEventDispatcher } from "svelte";
+  import { useQuery } from "@sveltestack/svelte-query";
+  import { getGame } from "../api/games";
+
   const dispatch = createEventDispatcher();
 
   export let id = "";
-  $: console.log({ id });
 
-  let name = "TerraNova (1900)";
-  let imageUrl =
-    "https://images.igdb.com/igdb/image/upload/t_cover_big/ndfzbf3xvuuchijx7v1c.jpg";
+  const queryResult = useQuery(["getGame", id], () => getGame(id));
+  // $: console.log($queryResult);
+
+  let name;
+  let imageUrl;
+  $: name = $queryResult?.data?.name ?? "Loading...";
+  $: imageUrl = $queryResult?.data?.background_image ?? "";
 </script>
 
 <style lang="scss">
@@ -39,7 +45,9 @@
 </style>
 
 <div class="selected-game">
-  <span class="game-image"><img src={imageUrl} alt="cover art" /></span>
+  <span class="game-image">
+    {#if imageUrl}<img src={imageUrl} alt="cover art" />{/if}
+  </span>
   <span class="game-name">{name}</span>
   <button on:click={() => dispatch('remove')}><TrashIcon
       class="icon" /></button>

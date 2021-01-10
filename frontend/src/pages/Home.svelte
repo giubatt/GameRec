@@ -4,8 +4,14 @@
   import SelectedGame from "../components/SelectedGame.svelte";
   import PlayIcon from "../icons/play.svg";
 
-  let selectedGames = [];
-  $: console.log({ selectedGames });
+  let selectedGames = [3498];
+
+  import { useMutation } from "@sveltestack/svelte-query";
+  import { getRecommendation } from "../api/games";
+  import RecommendationList from "../components/RecommendationList.svelte";
+
+  // Queries
+  const mutation = useMutation((recGameId) => getRecommendation(recGameId));
 </script>
 
 <style lang="scss">
@@ -21,10 +27,10 @@
     }
   }
 
-  .add-more-text {
-    width: 400px;
-    text-align: center;
-  }
+  // .add-more-text {
+  //   width: 400px;
+  //   text-align: center;
+  // }
 
   .cta-button {
     display: flex;
@@ -66,16 +72,26 @@
             id={gameId}
             on:remove={() => {
               selectedGames = selectedGames.filter((id) => id !== gameId);
+              recGameId = '';
             }} />
         {/each}
       </div>
-      <button class="cta-button"><PlayIcon class="icon" />Get Recomendations</button>
-      <p class="add-more-text text-body-1">
+      <button
+        class="cta-button"
+        on:click={() => {
+          $mutation.mutate(selectedGames[0]);
+        }}><PlayIcon class="icon" />Get Recomendations</button>
+      <!-- <p class="add-more-text text-body-1">
         You can add more titles to receive more accurate recommendations or
         continue to see a list of recommended games
       </p>
       <SearchInput
-        on:selected={(event) => (selectedGames = [...selectedGames, event.detail.id])} />
+        on:selected={(event) => (selectedGames = [...selectedGames, event.detail.id])} /> -->
+      {#if $mutation.isLoading}
+        Loading...
+      {:else if $mutation.status === 'success'}
+        <RecommendationList ids={$mutation?.data?.ids} />
+      {:else if $mutation.status === 'error'}Error getting recommendation{/if}
     {/if}
   </div>
 </Layout>
