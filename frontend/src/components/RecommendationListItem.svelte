@@ -7,12 +7,12 @@
   const queryResult = useQuery(["getGame", id], () => getGame(id));
 
   let name;
-  let metacriticScore;
   let storeUrl;
+  let gameUrl;
 
   $: name = $queryResult?.data?.name ?? "";
-  $: metacriticScore = $queryResult?.data?.metacritic ?? "";
   $: storeUrl = $queryResult?.data?.stores?.[0]?.store?.domain ?? "";
+  $: gameUrl = $queryResult?.data?.slug ?? "";
 </script>
 
 <style lang="scss">
@@ -28,14 +28,6 @@
 
         color: #f28b30;
       }
-
-      &.score {
-        font-weight: 500;
-        font-size: 18px;
-        text-align: center;
-
-        color: #a5abb1;
-      }
     }
   }
 
@@ -45,8 +37,7 @@
 </style>
 
 <tr>
-  <td class="name">{name}</td>
-  <td class="score">{metacriticScore}</td>
+  <td class="name"><a href={`https://igdb.com/games/${gameUrl}`}>{name}</a></td>
   <td class="store">
     <a href={`https://${storeUrl}`}><CartIcon /></a>
   </td>

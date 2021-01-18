@@ -49,6 +49,11 @@
     letter-spacing: 2px;
     text-transform: uppercase;
   }
+
+  .success-header {
+    width: 700px;
+    text-align: center;
+  }
 </style>
 
 <Layout>
@@ -66,7 +71,9 @@
         on:selected={(event) => (selectedGames = [...selectedGames, event.detail.id])} />
     {:else}
       <div class="flex flex-col items-center gap-4 pt-10 pb-10">
-        <h1 class="font-semibold">Success!</h1>
+        <h1 class="font-semibold success-header">
+          Tell us a game that you love and we will suggest you similar ones!
+        </h1>
         {#each selectedGames as gameId}
           <SelectedGame
             id={gameId}

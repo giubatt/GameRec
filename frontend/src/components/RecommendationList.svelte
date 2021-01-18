@@ -32,7 +32,6 @@
   <thead>
     <tr>
       <th class="name">Title</th>
-      <th class="score">Score</th>
       <th />
     </tr>
   </thead>
